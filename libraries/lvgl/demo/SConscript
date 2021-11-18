@@ -1,0 +1,44 @@
+import rtconfig
+from building import *
+
+cwd = GetCurrentDir()
+src = Glob('*.c') + Glob('*.cpp')
+
+path =  [cwd]
+path += [cwd + '/src']
+
+if GetDepend(['LVGL_USING_DEMO_BENCHMARK']):
+    src += Glob('src/lv_demo_benchmark/*.c')
+    src += Glob('src/lv_demo_benchmark/assets/*.c')
+    path += [cwd + '/src/lv_demo_benchmark']
+    path += [cwd + '/src/lv_demo_benchmark/assets']
+    
+if GetDepend(['LVGL_USING_DEMO_KEYPAD_ENCODER']):
+    src += Glob('src/lv_demo_keypad_encoder/*.c')
+    src += Glob('src/lv_demo_keypad_encoder/assets/*.c')
+    path += [cwd + '/src/lv_demo_keypad_encoder']
+    path += [cwd + '/src/lv_demo_keypad_encoder/assets']
+
+if GetDepend(['LVGL_USING_DEMO_MUSIC']):
+    src += Glob('src/lv_demo_music/*.c')
+    src += Glob('src/lv_demo_music/assets/*.c')
+    path += [cwd + '/src/lv_demo_music']
+    path += [cwd + '/src/lv_demo_music/assets']
+
+if GetDepend(['LVGL_USING_DEMO_STRESS']):
+    src += Glob('src/lv_demo_stress/*.c')
+    src += Glob('src/lv_demo_stress/assets/*.c')
+    path += [cwd + '/src/lv_demo_stress']
+    path += [cwd + '/src/lv_demo_stress/assets']
+
+if GetDepend(['LVGL_USING_DEMO_WIDGETS']):
+    src += Glob('src/lv_demo_widgets/*.c')
+    src += Glob('src/lv_demo_widgets/assets/*.c')
+    path += [cwd + '/src/lv_demo_widgets']
+    path += [cwd + '/src/lv_demo_widgets/assets']
+
+group = DefineGroup('LVGL-demo', src, depend = ['BSP_USING_LVGL'], CPPPATH = path)
+
+Return('group')
+
+
