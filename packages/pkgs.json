@@ -3,10 +3,5 @@
   "path": "/packages/multimedia/LVGL/LVGL", 
   "ver": "latest", 
   "name": "LVGL"
- }, 
- {
-  "path": "/packages/peripherals/touch/ft6206", 
-  "ver": "latest", 
-  "name": "FT6206"
  }
 ]
