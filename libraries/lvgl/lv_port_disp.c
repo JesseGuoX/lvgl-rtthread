@@ -28,32 +28,26 @@ volatile uint8_t g_gpu_state = 0;
 
 static void lvgl_dma2d_config(void)
 {
-    /* Configure the DMA2D Mode, Color Mode and output offset */
-    hdma2d.Init.Mode         = DMA2D_M2M;
-    hdma2d.Init.ColorMode    = DMA2D_OUTPUT_RGB565;
-    hdma2d.Init.OutputOffset = 0x0;
+      hdma2d.Instance = DMA2D;
+      hdma2d.Init.Mode = DMA2D_M2M;
+      hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB565;
+      hdma2d.Init.OutputOffset = 0;
 
-    /* Foreground Configuration */
-    hdma2d.LayerCfg[1].AlphaMode = DMA2D_REPLACE_ALPHA;
-    hdma2d.LayerCfg[1].InputAlpha = 0x0;
-    hdma2d.LayerCfg[1].InputColorMode = DMA2D_INPUT_RGB565;
-    hdma2d.LayerCfg[1].InputOffset = 0x0;
-    hdma2d.LayerCfg[1].RedBlueSwap  = DMA2D_RB_REGULAR;
-    hdma2d.LayerCfg[1].ChromaSubSampling = DMA2D_NO_CSS;
-
-    hdma2d.Instance   = DMA2D;
-
-    /* DMA2D Initialization */
-    if (HAL_DMA2D_Init(&hdma2d) != HAL_OK)
-    {
-    /* Initialization Error */
-    Error_Handler();
-    }
-
-    if (HAL_DMA2D_ConfigLayer(&hdma2d, 1) != HAL_OK)
-    {
+      hdma2d.LayerCfg[1].InputOffset = 0;
+      hdma2d.LayerCfg[1].InputColorMode = DMA2D_INPUT_RGB565;
+      hdma2d.LayerCfg[1].AlphaMode = DMA2D_NO_MODIF_ALPHA;
+      hdma2d.LayerCfg[1].InputAlpha = 255;
+      hdma2d.LayerCfg[1].AlphaInverted = DMA2D_REGULAR_ALPHA;
+      hdma2d.LayerCfg[1].RedBlueSwap = DMA2D_RB_REGULAR;
+      hdma2d.LayerCfg[1].ChromaSubSampling = DMA2D_NO_CSS;
+      if (HAL_DMA2D_Init(&hdma2d) != HAL_OK)
+      {
         Error_Handler();
-    }
+      }
+      if (HAL_DMA2D_ConfigLayer(&hdma2d, 1) != HAL_OK)
+      {
+        Error_Handler();
+      }
 }
 
 void DMA2D_IRQHandler(void)
@@ -112,7 +106,6 @@ void lv_port_disp_init(void)
 {
     rt_err_t result;
     void* buf_1 = RT_NULL;
-    void* buf_2 = RT_NULL;
     
     lcd_device = rt_device_find("lcd");
     if (lcd_device == 0)
@@ -148,13 +141,6 @@ void lv_port_disp_init(void)
         return;
     }
     rt_memset(buf_1, 0, COLOR_BUFFER * sizeof(lv_color_t));
-//    buf_2 = rt_malloc_align(COLOR_BUFFER * sizeof(lv_color_t), COLOR_BUFFER * sizeof(lv_color_t));
-//    if (buf_2 == RT_NULL)
-//    {
-//        LOG_E("malloc memory failed");
-//        return;
-//    }
-//    rt_memset(buf_2, 0, COLOR_BUFFER * sizeof(lv_color_t));
 
     /*Initialize `disp_buf` with the buffer(s).*/
     lv_disp_draw_buf_init(&disp_buf, buf_1, NULL, COLOR_BUFFER);

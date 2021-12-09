@@ -56,10 +56,10 @@ static void touch_thread_entry(void *parameter)
     touch->ops->isr_enable(RT_TRUE);
     while (1)
     {
-        if (rt_sem_take(touch->isr_sem, 10) != RT_EOK)
-        {
-            continue;
-        }
+//        if (rt_sem_take(touch->isr_sem, 10) != RT_EOK)
+//        {
+//            continue;
+//        }
 
         while(touch->ops->read_point(&msg) == RT_EOK)
         {
@@ -78,9 +78,9 @@ static void touch_thread_entry(void *parameter)
             default:
                 break;
             }
-            rt_thread_delay(RT_TICK_PER_SECOND / BSP_TOUCH_SAMPLE_HZ);
         }
-        touch->ops->isr_enable(RT_TRUE);
+//        touch->ops->isr_enable(RT_TRUE);
+        rt_thread_mdelay(10);
     }
 }
 
@@ -92,16 +92,19 @@ static int rt_touch_driver_init(void)
 INIT_BOARD_EXPORT(rt_touch_driver_init);
 
 static struct rt_i2c_bus_device *i2c_bus = RT_NULL;
-static int rt_touch_thread_init(void)
+static int touc_bg_init(void)
 {
+    rt_thread_t tid = RT_NULL;
+    
     rt_list_t *l;
     touch_drv_t current_driver;
-    rt_thread_t tid = RT_NULL;
     i2c_bus = (struct rt_i2c_bus_device *)rt_device_find(BSP_I2C_NAME);
     RT_ASSERT(i2c_bus);
     current_driver = RT_NULL;
     if (rt_device_open((rt_device_t)i2c_bus, RT_DEVICE_OFLAG_RDWR) != RT_EOK)
+    {
         return -1;
+    }
     for (l = driver_list.next; l != &driver_list; l = l->next)
     {
         if (rt_list_entry(l, struct touch_drivers, list)->probe(i2c_bus))
@@ -118,6 +121,7 @@ static int rt_touch_thread_init(void)
     }
     current_driver->ops->init(i2c_bus);
     LOG_I("touch screen found driver\r\n");
+
     tid = rt_thread_create("touch", touch_thread_entry, current_driver, 2048, 27, 20);
     if (tid == RT_NULL)
     {
@@ -126,23 +130,7 @@ static int rt_touch_thread_init(void)
         return -1;
     }
     rt_thread_startup(tid);
-    return 0;
-}
 
-static void touch_init_thread_entry(void *parameter)
-{
-    rt_touch_thread_init();
-}
-
-static int touc_bg_init(void)
-{
-    rt_thread_t tid = RT_NULL;
-    tid = rt_thread_create("touchi", touch_init_thread_entry, RT_NULL, 2048, 28, 20);
-    if (tid == RT_NULL)
-    {
-        return -1;
-    }
-    rt_thread_startup(tid);
     return 0;
 }
 INIT_APP_EXPORT(touc_bg_init);

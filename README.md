@@ -1,54 +1,69 @@
-# LED闪烁例程
+# 基于 ART-PI 的 LVGL-Demos 移植
 
 ## 简介
 
-本例程主要功能是让板载的 RGB-LED 中的蓝色 LED 不间断闪烁。
-这个例程也可以做为您的创作的基础工程。
+本例程主要功能是在 ART-PI 上运行 LVGL-Demos.
 
 ## 硬件说明
-<img src="./figures/blink_pcb.png" alt="LED 连接单片机引脚" style="zoom: 50%;" />
-如上图所示，RGB-LED 属于共阳 LED， **阴极** 分别与单片机的引脚相连，其中蓝色 LED 对应 PI8 引脚。单片机引脚输出低电平即可点亮 LED，输出高电平则会熄灭 LED。
+
+本工程主要硬件为 RGB 显示屏，以及 ART-Pi.
 
 ## 软件说明
 
-闪灯的源代码位于 `/projects/art_pi_blink_led/applications/main.c` 中。首先定义了一个宏 `LED_PIN` ，代表闪灯的 LED 引脚编号，然后与 `GPIO_LED_B`（**PI8**）对应：
+LVGL-Demos 源码位于 libraries/lvgl/demo，共有 5 个 LVGL 官方提供的例程。LVGL 所用版本为 [LVGL](https://github.com/lvgl/lvgl.git) 官方最新代码。
 
-```
-#define LED_PIN GET_PIN(I, 8)
-```
+在 `lvgl_thread` 线程中，根据不同的宏定义使用不同的 demo。
 
-在 main 函数中，将该引脚配置为输出模式，并在下面的 while 循环中，周期性（500毫秒）开关 LED。
-
-```
-int main(void)
-{
-    rt_uint32_t count = 1;
-
-    rt_pin_mode(LED_PIN, PIN_MODE_OUTPUT);
-
-    while(count++)
-    {
-        rt_thread_mdelay(500);
-        rt_pin_write(LED_PIN, PIN_HIGH);
-        rt_thread_mdelay(500);
-        rt_pin_write(LED_PIN, PIN_LOW);
-    }
-    return RT_EOK;
+static void lvgl_thread(void *parameter)  
+{  
+#if LV_USE_DEMO_BENCHMARK  
+ extern void lv_demo_benchmark(void);  
+ lv_demo_benchmark();  
+#elif LV_USE_DEMO_STRESS  
+ void lv_demo_stress(void);  
+ lv_demo_stress();  
+#elif LV_USE_DEMO_MUSIC  
+ extern void lv_demo_music(void);  
+ lv_demo_music();  
+#elif LV_USE_DEMO_KEYPAD_AND_ENCODER  
+ extern void lv_demo_keypad_encoder(void);  
+ lv_demo_keypad_encoder();  
+#elif LV_USE_DEMO_WIDGETS  
+ extern void lv_demo_widgets(void);  
+ lv_demo_widgets();  
+#endif  
+​  
+ while(1)  
+ {  
+ lv_task_handler();  
+ rt_thread_mdelay(1);  
+ }  
 }
-```
 
+## 使用说明
 
+1. 使用 git 工具 clone 本工程：`https://github.com/liukangcc/ART-PI-LVGL-DEMO.git`
 
-## 运行
-### 编译&下载
+2. 在工程目录下打开 env 工具，输入命令 `menuconfig`
 
-编译完成后，将开发板的 ST-Link USB 口与 PC 机连接，然后将固件下载至开发板。
+3. 选择一个 demo，保存并退出
 
-### 运行效果
+4. 输入命令 `pkgs --update` 拉取 LVGL 软件包
 
-正常运行后，蓝色 LED 会周期性闪烁。
+5. 输入命令 `scons --target=mdk5` 生成 KEIL 工程
 
-## 注意事项
+6. 打开 keil，编译下载代码；
 
-如果想要修改`LED_PIN` 宏定义，可以通过 GET_PIN 来修改。
+## 演示效果
+
+### benchmark
+
+## keypad_encoder
+
+## music
+
+## stress
+
+## widgets
+
 

@@ -16,7 +16,7 @@
 #include <lv_port_indev.h>
 
 #ifndef LV_THREAD_STACK_SIZE
-#define LV_THREAD_STACK_SIZE 4096
+#define LV_THREAD_STACK_SIZE 8192
 #endif
 
 #ifndef LV_THREAD_PRIO

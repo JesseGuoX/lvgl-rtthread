@@ -13,6 +13,7 @@
 #include <rthw.h>
 #include <rtdevice.h>
 #include "drv_touch.h"
+#include "drv_common.h"
 
 #include <stdint.h>
 #include <string.h>
@@ -96,6 +97,7 @@ static void ft_isr_enable(rt_bool_t enable)
 
 static void ft_touch_isr(void *parameter)
 {
+    rt_kprintf("isr\n");
     ft_isr_enable(RT_FALSE);
     rt_sem_release(ft_driver.isr_sem);
 }
@@ -144,6 +146,7 @@ static rt_err_t ft_read_point(touch_msg_t msg)
     return RT_EOK;
 }
 
+#define TOUCH_INT_PIN GET_PIN(G, 12)
 static void ft_init(struct rt_i2c_bus_device *i2c_bus)
 {
     if (ft_i2c_bus == RT_NULL)
@@ -153,8 +156,8 @@ static void ft_init(struct rt_i2c_bus_device *i2c_bus)
     ft_driver.isr_sem = rt_sem_create("ft", 0, RT_IPC_FLAG_FIFO);
     RT_ASSERT(ft_driver.isr_sem);
 
-    rt_pin_mode(BSP_TOUCH_INT_PIN, PIN_MODE_INPUT_PULLUP);
-    rt_pin_attach_irq(BSP_TOUCH_INT_PIN, PIN_IRQ_MODE_FALLING, ft_touch_isr, RT_NULL);
+//    rt_pin_mode(TOUCH_INT_PIN, PIN_MODE_INPUT_PULLUP);
+//    rt_pin_attach_irq(TOUCH_INT_PIN, PIN_IRQ_MODE_FALLING, ft_touch_isr, RT_NULL);
 
     rt_thread_mdelay(200);
 }

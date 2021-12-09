@@ -105,6 +105,7 @@
 #define RT_USING_I2C
 #define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
+#define RT_USING_RTC
 #define RT_USING_SDIO
 #define RT_SDIO_STACK_SIZE 512
 #define RT_SDIO_THREAD_PRIORITY 15
@@ -170,9 +171,11 @@
 
 #define PKG_USING_LVGL
 #define PKG_USING_LVGL_LATEST_VERSION
-#define LVGL_USING_DEMO_MUSIC
 
 /* u8g2: a monochrome graphic library */
+
+
+/* PainterEngine: A cross-platform graphics application framework written in C language */
 
 
 /* tools packages */
@@ -180,7 +183,13 @@
 
 /* system packages */
 
+/* enhanced kernel services */
+
+
 /* acceleration: Assembly language or algorithmic acceleration packages */
+
+
+/* CMSIS: ARM Cortex-M Microcontroller Software Interface Standard */
 
 
 /* Micrium: Micrium software products porting for RT-Thread */
@@ -217,11 +226,12 @@
 /* Onboard Peripheral */
 
 #define BSP_USING_LVGL
+#define LVGL_USING_DEMO_WIDGETS
 #define BSP_USING_USB_TO_USART
 #define BSP_USING_FS
 #define BSP_USING_SDCARD_FS
 #define BSP_USING_TOUCH
-#define BSP_TOUCH_INT_PIN 149
+#define BSP_TOUCH_INT_PIN 92
 #define BSP_I2C_NAME "i2c1"
 
 /* On-chip Peripheral */

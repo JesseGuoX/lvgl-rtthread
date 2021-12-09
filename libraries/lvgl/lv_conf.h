@@ -18,8 +18,7 @@
 #define LV_GPU_DMA2D_CMSIS_INCLUDE  "stm32h750xx.h"
 
 #define LV_HOR_RES_MAX          (1024)
-#define LV_VER_RES_MAX          (600)    /* In double buffered mode wait until the other buffer is freed
-     * and driver is ready to receive the new buffer */
+#define LV_VER_RES_MAX          (600)
 
 #ifdef LVGL_USING_DEMO_BENCHMARK
 #define LV_USE_DEMO_BENCHMARK       1
