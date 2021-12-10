@@ -68,21 +68,21 @@ LVGL-Demo 在 ART-PI 上的演示效果：
 
 ### benchmark
 
-<video src="figures/b96a6ad5826034fc2e7a617a7dad0688.mp4"></video>
+![](figures/4.gif)
 
 ## keypad_encoder
 
-<video src="figures/f265e1aa2e13d2b524e1a30463ea5732.mp4"></video>
+![](figures/5.gif)
 
 ## music
 
-<video src="figures/b91c9449cde943222e9ac67f9670d4c0.mp4"></video>
+![](figures/3.gif)
 
 ## stress
 
-<video src="figures/6171c785a49ddab3b19a7299829f1bc6.mp4"></video>
+![](figures/2.gif)
+
 
 ## widgets
 
-<video src="figures/389e9da2800e4f26e3dc2aff43cbb7c9.mp4"></video>
-
+![](figures/1.gif)
