@@ -66,30 +66,6 @@ static int ft_read(struct rt_i2c_bus_device *i2c_bus, rt_uint8_t addr, rt_uint8_
     return ret;
 }
 
-static void ft_write(touch_drv_t driver, struct rt_i2c_bus_device *i2c_bus, rt_uint8_t addr, rt_uint8_t *buffer, rt_size_t length)
-{
-    rt_uint8_t *send_buffer = rt_malloc(length + 1);
-
-    RT_ASSERT(send_buffer);
-
-    send_buffer[0] = addr;
-    memcpy(send_buffer + 1, buffer, length);
-
-    struct rt_i2c_msg msgs[] =
-    {
-        {
-            .addr   = ft_driver.address,
-            .flags  = RT_I2C_WR,
-            .len    = length + 1,
-            .buf    = send_buffer,
-        }
-    };
-
-    length = rt_i2c_transfer(i2c_bus, msgs, 1);
-    rt_free(send_buffer);
-    send_buffer = RT_NULL;
-}
-
 static void ft_isr_enable(rt_bool_t enable)
 {
     rt_pin_irq_enable(BSP_TOUCH_INT_PIN, enable);
@@ -97,7 +73,6 @@ static void ft_isr_enable(rt_bool_t enable)
 
 static void ft_touch_isr(void *parameter)
 {
-    rt_kprintf("isr\n");
     ft_isr_enable(RT_FALSE);
     rt_sem_release(ft_driver.isr_sem);
 }
@@ -146,7 +121,6 @@ static rt_err_t ft_read_point(touch_msg_t msg)
     return RT_EOK;
 }
 
-#define TOUCH_INT_PIN GET_PIN(G, 12)
 static void ft_init(struct rt_i2c_bus_device *i2c_bus)
 {
     if (ft_i2c_bus == RT_NULL)
@@ -156,8 +130,8 @@ static void ft_init(struct rt_i2c_bus_device *i2c_bus)
     ft_driver.isr_sem = rt_sem_create("ft", 0, RT_IPC_FLAG_FIFO);
     RT_ASSERT(ft_driver.isr_sem);
 
-//    rt_pin_mode(TOUCH_INT_PIN, PIN_MODE_INPUT_PULLUP);
-//    rt_pin_attach_irq(TOUCH_INT_PIN, PIN_IRQ_MODE_FALLING, ft_touch_isr, RT_NULL);
+    rt_pin_mode(BSP_TOUCH_INT_PIN, PIN_MODE_INPUT_PULLUP);
+    rt_pin_attach_irq(BSP_TOUCH_INT_PIN, PIN_IRQ_MODE_FALLING, ft_touch_isr, RT_NULL);
 
     rt_thread_mdelay(200);
 }

@@ -186,8 +186,8 @@ menu "Onboard Peripheral"
         default n
         if BSP_USING_TOUCH
             config BSP_TOUCH_INT_PIN
-                int "Touch interrupt pin"
-                default 92
+                int "Touch interrupt pin (PG12)"
+                default 108
             config BSP_I2C_NAME
                 string "I2C Bus Name"
                 default "i2c1"

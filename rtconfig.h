@@ -171,6 +171,7 @@
 
 #define PKG_USING_LVGL
 #define PKG_USING_LVGL_LATEST_VERSION
+#define PKG_LVGL_VER_NUM 0x99999
 
 /* u8g2: a monochrome graphic library */
 
@@ -184,6 +185,9 @@
 /* system packages */
 
 /* enhanced kernel services */
+
+
+/* POSIX extension functions */
 
 
 /* acceleration: Assembly language or algorithmic acceleration packages */
@@ -209,12 +213,6 @@
 /* entertainment: terminal games and other interesting software packages */
 
 
-/* Privated Packages of RealThread */
-
-
-/* Network Utilities */
-
-
 /* Hardware Drivers Config */
 
 #define SOC_STM32H750XB
@@ -226,12 +224,12 @@
 /* Onboard Peripheral */
 
 #define BSP_USING_LVGL
-#define LVGL_USING_DEMO_WIDGETS
+#define LVGL_USING_DEMO_MUSIC
 #define BSP_USING_USB_TO_USART
 #define BSP_USING_FS
 #define BSP_USING_SDCARD_FS
 #define BSP_USING_TOUCH
-#define BSP_TOUCH_INT_PIN 92
+#define BSP_TOUCH_INT_PIN 108
 #define BSP_I2C_NAME "i2c1"
 
 /* On-chip Peripheral */

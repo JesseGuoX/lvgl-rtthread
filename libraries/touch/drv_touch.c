@@ -56,10 +56,10 @@ static void touch_thread_entry(void *parameter)
     touch->ops->isr_enable(RT_TRUE);
     while (1)
     {
-//        if (rt_sem_take(touch->isr_sem, 10) != RT_EOK)
-//        {
-//            continue;
-//        }
+        if (rt_sem_take(touch->isr_sem, 10) != RT_EOK)
+        {
+            continue;
+        }
 
         while(touch->ops->read_point(&msg) == RT_EOK)
         {
@@ -79,8 +79,7 @@ static void touch_thread_entry(void *parameter)
                 break;
             }
         }
-//        touch->ops->isr_enable(RT_TRUE);
-        rt_thread_mdelay(10);
+        touch->ops->isr_enable(RT_TRUE);
     }
 }
 
