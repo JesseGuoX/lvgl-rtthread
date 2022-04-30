@@ -14,6 +14,7 @@
 
 /* defined the LED0 pin: PI8 */
 #define LED0_PIN    GET_PIN(I, 8)
+#define USER_KEY    GET_PIN(H, 4)
 
 int main(void)
 {
@@ -21,13 +22,17 @@ int main(void)
 
     /* set LED0 pin mode to output */
     rt_pin_mode(LED0_PIN, PIN_MODE_OUTPUT);
+    rt_pin_mode(USER_KEY, PIN_MODE_INPUT_PULLDOWN);
 
     while(count++)
     {
-        rt_pin_write(LED0_PIN, PIN_HIGH);
-        rt_thread_mdelay(500);
-        rt_pin_write(LED0_PIN, PIN_LOW);
-        rt_thread_mdelay(500);
+        if(rt_pin_read(USER_KEY)){
+            rt_pin_write(LED0_PIN, PIN_HIGH);
+            rt_thread_mdelay(500);
+            rt_pin_write(LED0_PIN, PIN_LOW);
+            rt_thread_mdelay(500);
+        }
+        rt_thread_mdelay(10);
     }
     return RT_EOK;
 }

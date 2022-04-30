@@ -8,6 +8,8 @@ CROSS_TOOL='gcc'
 # bsp lib config
 BSP_LIBRARY_TYPE = None
 
+os.environ["RTT_EXEC_PATH"] = '/Users/jg/Downloads/gcc-arm-none-eabi-10.3-2021.10/bin'
+
 if os.getenv('RTT_CC'):
     CROSS_TOOL = os.getenv('RTT_CC')
 if os.getenv('RTT_ROOT'):
